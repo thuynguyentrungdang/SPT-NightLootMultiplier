@@ -48,12 +48,15 @@ public sealed class NightLootMultiplierPatch : AbstractPatch
     [HarmonyPriority(Priority.Low)]
     public static void Prefix(MongoId sessionId, string name, bool generateLoot)
     {
-        if (!generateLoot || name.Equals("hideout", StringComparison.OrdinalIgnoreCase))
+        if (!generateLoot 
+            || name.Equals("hideout", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("laboratory", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("labyrinth", StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
 
-        var raidConfig = _profileActivityService.GetProfileActivityRaidData(sessionId)?.RaidConfiguration;
+        var raidConfig = _profileActivityService.GetProfileActivityRaidData(sessionId).RaidConfiguration;
         var isNight = raidConfig?.IsNightRaid ?? false;
         var factor = isNight ? _configService.Config.NightMultiplier : _configService.Config.DayMultiplier;
 
