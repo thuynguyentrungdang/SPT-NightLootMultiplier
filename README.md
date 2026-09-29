@@ -7,6 +7,7 @@ SPT (Single Player Tushonka) server mod. Scales loose/static loot spawn multipli
 - **Night/day loot scaling** — reads raid's `IsNightRaid` flag (already computed server-side for bot inventory gen). Applies configurable multiplier to `LooseLootMultiplier` / `StaticLootMultiplier` for the map, before loot gen runs.
 - **Soft LotsofLoot integration** — if LotsofLoot installed, also scales its Marked Room / Ref Room multipliers for current map, via runtime reflection (no assembly ref). Not installed → skipped clean, one log line, nothing breaks.
 - **Night bot difficulty weighting** — standalone, no ABPS or other mod dependency. Postfixes `LocationLifecycleService.GenerateLocationAndLoot`, re-rolls `BossDifficulty`/`BossEscortDifficulty` on the per-raid location clone's boss/PMC spawn entries — independent PMC vs boss weights, split by `BossName` ("pmcUSEC"/"pmcBEAR" = PMC, everything else = boss — including "pmcBot", which is actually Raiders). Night raids only, only when pre-raid difficulty dropdown is "AsOnline" — day raids and explicit difficulty choices are completely untouched (ABPS's own weighting if installed, vanilla otherwise). Doesn't cover non-boss dynamic scav waves — that data has no per-wave difficulty field to rewrite.
+- **SIC config editor integration** — registers `config.json` with SIC's own built-in config editor via `IConfigEditorConfigProvider` (no custom page). Shows up alongside every other SPT/mod config on SIC's Configs screen — JSON + structured Controls tab, diffing, presets, all for free. `RuntimeConfig` is the same live object the patches read from, so edits apply immediately.
 
 ## Installation
 
@@ -37,7 +38,7 @@ Edit `user/mods/NightLootMultiplier/config/config.json`:
 - `NightPmcDifficulty` — weighted odds (easy/normal/hard/impossible) for PMC-as-wave spawn entries, night raids only, dropdown at "AsOnline" only.
 - `NightBossDifficulty` — same, for actual boss spawn entries.
 
-Restart server after config edit.
+Restart server after config edit — or skip the file entirely and use SIC's Configs page (find "Night Loot Multiplier" in the config list), which writes changes live.
 
 ## Build guide
 
