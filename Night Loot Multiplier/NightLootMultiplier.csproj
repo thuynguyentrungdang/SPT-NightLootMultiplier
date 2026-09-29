@@ -16,6 +16,7 @@
         <PackageReference Include="SPTushonka.DI" Version="4.1.6"/>
         <PackageReference Include="SPTushonka.Server.Core" Version="4.1.6"/>
         <PackageReference Include="SPTushonka.Reflection" Version="4.1.6"/>
+        <PackageReference Include="SPTushonka.Server.Web" Version="4.1.6"/>
     </ItemGroup>
 
     <PropertyGroup>
