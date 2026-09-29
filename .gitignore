@@ -1,0 +1,7 @@
+bin/
+obj/
+*.user
+.vs/
+.idea/
+Night Loot Multiplier/.idea
+Night Loot Multiplier/Properties/
