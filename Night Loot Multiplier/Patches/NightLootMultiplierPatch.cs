@@ -60,12 +60,14 @@ public sealed class NightLootMultiplierPatch : AbstractPatch
         var isNight = raidConfig?.IsNightRaid ?? false;
         var factor = isNight ? _configService.Config.NightMultiplier : _configService.Config.DayMultiplier;
 
-        if (_baseSnapshot.LooseLootBase.TryGetValue(name, out var looseBase))
+        if (_lotsofLootIntegration.TryGetLooseLootMultiplier(name, out var looseBase)
+            || _baseSnapshot.LooseLootBase.TryGetValue(name, out looseBase))
         {
             _locationConfig.LooseLootMultiplier[name] = looseBase * factor;
         }
 
-        if (_baseSnapshot.StaticLootBase.TryGetValue(name, out var staticBase))
+        if (_lotsofLootIntegration.TryGetStaticLootMultiplier(name, out var staticBase)
+            || _baseSnapshot.StaticLootBase.TryGetValue(name, out staticBase))
         {
             _locationConfig.StaticLootMultiplier[name] = staticBase * factor;
         }
