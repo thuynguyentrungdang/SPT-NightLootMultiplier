@@ -1,4 +1,10 @@
 {
   "NightMultiplier": 1.5,
-  "DayMultiplier": 1.0
+  "DayMultiplier": 1.0,
+  "NightBotDifficulty": {
+    "easy": 0,
+    "normal": 10,
+    "hard": 40,
+    "impossible": 50
+  }
 }
