@@ -25,6 +25,10 @@ namespace NightLootMultiplier.Patches;
 /// this raid only, night raids only. Never touches the shared template ABPS/vanilla wrote to, so
 /// day raids and every other mod's own raid are completely unaffected.
 ///
+/// PMC and boss entries share the same BossLocationSpawn shape. Every map's base.json marks PMC
+/// wave entries with BossName "pmcUSEC"/"pmcBEAR" - each entry picks its weight dict by that
+/// field, NightPmcDifficulty vs NightBossDifficulty, for independent PMC/boss control.
+///
 /// Known gap: regular (non-boss) scav Wave entries carry no difficulty field at all in this data
 /// model, so dynamic scav difficulty isn't covered here - only boss + PMC-as-boss-spawn entries.
 /// </summary>
@@ -83,8 +87,17 @@ public sealed class NightBotDifficultyPatch : AbstractPatch
 
         foreach (var spawn in __result.BossLocationSpawn)
         {
-            spawn.BossDifficulty = _weightedRandomHelper.GetWeightedValue(_configService.Config.NightBotDifficulty);
-            spawn.BossEscortDifficulty = _weightedRandomHelper.GetWeightedValue(_configService.Config.NightBotDifficulty);
+            // "pmcUSEC"/"pmcBEAR" are the BossName values every map's base.json uses for PMC-as-
+            // wave entries. "pmcBot" (rezervbase/laboratory only) is Raiders, not PMCs - SPT
+            // core's own PostDbLoadService.cs comment says as much ("Raiders are bosses") -
+            // correctly falls into the boss bucket below.
+            var isPmc =
+                string.Equals(spawn.BossName, "pmcUSEC", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(spawn.BossName, "pmcBEAR", StringComparison.OrdinalIgnoreCase);
+            var weights = isPmc ? _configService.Config.NightPmcDifficulty : _configService.Config.NightBossDifficulty;
+
+            spawn.BossDifficulty = _weightedRandomHelper.GetWeightedValue(weights);
+            spawn.BossEscortDifficulty = _weightedRandomHelper.GetWeightedValue(weights);
         }
 
         _logger.Info($"[NightLootMultiplier] {name}: night difficulty applied to {__result.BossLocationSpawn.Count} spawn entries");
