@@ -49,7 +49,7 @@ jobs:
           # evaluates empty at that point in the SDK import order (only gets its default from
           # common targets imported later), so the real output dir has one name segment, not two.
           $outDir = "${{ env.PROJECT_DIR }}/bin/Release/${{ env.MOD_NAME }}"
-          $stage = "stage/user/mods/${{ env.MOD_NAME }}"
+          $stage = "stage/SPT_Runtime/user/mods/${{ env.MOD_NAME }}"
           New-Item -ItemType Directory -Force -Path $stage | Out-Null
           Copy-Item "$outDir/*.dll" -Destination $stage
           $cfg = "${{ env.PROJECT_DIR }}/config"
