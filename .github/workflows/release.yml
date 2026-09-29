@@ -11,6 +11,9 @@ env:
   PROJECT_DIR: Night Loot Multiplier
   METADATA_PATH: Night Loot Multiplier/ModMetadata.cs
 
+permissions:
+  contents: write
+
 jobs:
   build-release:
     runs-on: windows-latest
